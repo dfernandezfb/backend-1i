@@ -1,0 +1,20 @@
+required: valor booleano o function, si es true el valor es obligatorio.
+default: (Any o function) establece un valor predeterminado para la ruta. Si el valor es una función, el valor de retorno de la función se utiliza como predeterminado.
+select: booleano, especifica proyecciones predeterminadas para queries
+//validate: function, agrega una función de validación para esta propiedad
+//get: function, define un getter para esta propiedad usando Object.defineProperty().
+//set: function, define un setter para esta propiedad usando Object.defineProperty().
+//alias: string, valido para versiones de mongoose mayores a la mongoose 4.10.0. Define un alias virtual con el nombre asignado.
+//index: booleano, permite definir un índice.
+unique: booleano, si es true este valor debe ser único.
+lowercase: booleano,  llama a .toLowerCase () en el valor.
+uppercase: booleano, llama a  .toUpperCase() en el valor.
+trim: booleano, llama a .trim() en el valor.
+match: RegExp, crea un validador que verifica si el valor coincide con la expresión regular dada.
+enum: Array, crea un validador que verifica si el valor está en el arreglo dado. 
+minLength: Number, verifica la longitud mínima que debe cumplir el valor.
+maxLength: Number, verifica la longitud máxima que debe cumplir el valor.
+populate: Object, establece las opciones de llenado (populate) predeterminadas.
+min: Number, crea un validador que comprueba si el valor es mayor o igual al mínimo dado.
+max: Number, crea un validador que comprueba si el valor es menor o igual al máximo dado.
+

@@ -1,0 +1,158 @@
+body{
+  margin:0 ;
+  padding: 0;
+}
+.bg-azul-oscuro{
+  background-color: #2C3E50;
+}
+.bg-azul-marino{
+  background-color: #1ABC9C !important;
+}
+*{
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 600;
+}
+.main-container{
+  background-color: #1ABC9C;
+  height: 80vh;
+}
+.main-image{
+  width: 250px;
+}
+.hover-celeste:hover{
+  color: #1ABC9C !important;
+}
+.burguer-button{
+  color: white;
+  font-size: 15px !important;
+  font-weight: 200;
+  padding: 10px 10px !important;
+}
+.title-gallery{
+  font-size: 40px;
+  font-weight: 600;
+  padding-top: 100px;
+}
+.star-icon{
+  font-size: 30px;
+}
+.line{
+  width: 120px;
+  border-top: #2C3E50 4px solid;
+  display: inline-block;
+  transform: translateY(-200%);
+}
+.line-white{
+  border-top: white 4px solid;
+}
+.gallery-image{
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  border-radius: .5rem;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.more-image{
+  width: 100%;
+  height: 300px;
+  background-color: rgb(26, 188, 156,0);
+  border-radius: .5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  color: rgba(255, 255, 255, 0);
+}
+.more-image:hover{
+  transition: .5s;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(26, 188, 156, .7);
+}
+.cabin-image{
+  background-image: url('../assets/img/cabin.png');
+}
+.cake-image{
+  background-image: url('../assets/img/cake.png');
+}
+.circus-image{
+  background-image: url('../assets/img/circus.png');
+}
+.game-image{
+  background-image: url('../assets/img/game.png');
+}
+.safe-image{
+  background-image: url('../assets/img/safe.png');
+}
+.submarine-image{
+  background-image: url('../assets/img/submarine.png');
+}
+/*TODO DONT REPEAT YOURSELF */
+
+/*! OPCION CON GRID */
+/* .image-container{
+  object-fit: contain;
+  height: 100%;
+} */
+/* .gallery{
+  display: grid;
+  grid-template-columns:250px 250px 250px;
+  grid-template-rows: 200px 200px;
+  row-gap: 20px;
+  column-gap: 50px;
+  justify-content: center;
+}
+
+@media screen and (max-width:768px){
+  .gallery{
+    display: grid;
+    grid-template-columns:250px 250px ;
+    grid-template-rows: 200px 200px 200px;
+    row-gap: 20px;
+    column-gap: 50px;
+    justify-content: center;
+  }
+} */
+
+.about-container{
+  height: 60vh;
+  color: white;
+}
+.text-justify{
+  text-align: justify;
+}
+.my-button{
+  background-color: transparent;
+  color: white !important;
+  border: 2px solid white !important;
+  padding: 15px !important;
+}
+.my-button:hover{
+  background-color: white;
+  color: black !important;
+}
+/*!  INTENTANDO EMULAR LOS EFECTOS DE FORMULARIO SIN BOOTSTRAP */
+.my-input{
+  border-top: none !important;
+  border-left:none !important;
+  border-right:none !important;
+  border-bottom: 1px solid gray !important;
+}
+.my-input:focus{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* .my-input:focus-visible{
+} */
+/*.contact-form{
+  position: relative;
+}
+.label-input{
+  position: absolute;
+  left: 0;
+}
+.my-input:focus ~ .label-input{
+  font-size: 10px;
+  transform: translateY(-50%);
+} */
