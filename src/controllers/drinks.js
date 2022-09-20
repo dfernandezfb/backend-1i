@@ -1,10 +1,11 @@
+const CustomError = require("../helpers/CustomError");
 const Drink = require("../models/Drink");
 
 const addDrink = async (req,res)=>{
   try {
     const newDrink = new Drink(req.body);
-    await newDrink.save();
-    res.status(201).json({message:'La bebida ha sido guardada'})
+    const drinkSaved = await newDrink.save();
+    res.status(201).json({message:'La bebida ha sido guardada', drinkSaved})
   } catch (error) {
     res.status(error.code || 500).json({message:error.message})
   }
@@ -60,6 +61,31 @@ const autocomplete = async (req,res) =>{
   }
 }
 
+const editDrink = async (req,res)=>{
+  try {
+    // req.params;
+    const {id, update} = req.body;
+    // req.query;
+    // const drinkUpdated = Drink.findByIdAndUpdate(id, update/*{name:'nuevo nombre'}*/, {returnOriginal:true})
+    const drinkUpdated = await Drink.findByIdAndUpdate(id, update/*{name:'nuevo nombre'}*/, {new:true});
+    res.status(200).json({drinkUpdated});
+  } catch (error) {
+    res.status(error.code || 500).json({message:error.message});
+  }
+}
+
+const deleteDrink = async (req,res)=>{
+  try {
+    const {id} = req.body;
+    const drink = await Drink.findById(id);
+    if(!drink) throw new CustomError('No existe la bebida solicitada', 404);
+    // await Drink.findByIdAndUpdate(id, {status:false}); //? borrado logico;
+    await Drink.findByIdAndDelete(id);
+    res.status(200).json({message:"El usuario ha sido eliminado"});
+  } catch (error) {
+    res.status(error.code || 500).json({message:error.message});
+  }
+}
 
 
 module.exports= {
@@ -67,5 +93,7 @@ module.exports= {
   getDrinks,
   getDrinksCheaper,
   getCheaperDrinksOrOffers,
-  autocomplete
+  autocomplete,
+  editDrink,
+  deleteDrink
 }

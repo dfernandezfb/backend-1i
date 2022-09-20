@@ -21,9 +21,10 @@ const DrinkSchema = new Schema({
     default:false
   },
   owner:{
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref:'User'
-  }
+  },
+  status:Boolean
 },{
   versionKey:false,
   timestamps:true

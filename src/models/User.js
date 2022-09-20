@@ -15,8 +15,8 @@ const UserSchema = new Schema({
     uppercase:true,
   },
   password:{
-    type:String,
-    match:[/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,'La contraseña no tiene el formato adecuado']
+    type:String
+    // match:[/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,'La contraseña no tiene el formato adecuado']
   },
   age:{
     type:Number,

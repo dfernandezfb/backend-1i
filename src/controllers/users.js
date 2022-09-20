@@ -1,5 +1,7 @@
 const CustomError = require('../helpers/CustomError');
+const Drink = require('../models/Drink');
 const User = require('./../models/User');
+const bcrypt = require('bcryptjs')
 
 // const getUsers = (req,res)=>{
 //   console.log(req.body); //! LAS PETICIONES DE TIPO GET NO TIENEN BODY
@@ -47,12 +49,28 @@ const getYoungUsers = async(req,res)=>{
 //   res.status(201).json({user});
 // }
 
-const addUser = async(req,res)=>{
+// const addUser = async(req,res)=>{
+//   try {
+//     const newUser = new User(req.body);
+//     const userSaved = await newUser.save();
+//     if(!userSaved) throw new CustomError('Falla al crear usuario',400);
+//     res.status(201).json({userSaved})
+//   } catch (error) {
+//     res.status(error.code || 500).json({error:error.message});
+//   }
+// }
+
+const register = async ( req, res)=>{
   try {
-    const newUser = new User(req.body);
-    const userSaved = await newUser.save();
-    if(!userSaved) throw new CustomError('Falla al crear usuario',400);
-    res.status(201).json({userSaved})
+    const { password, ...user } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const passwordEncrypted= await bcrypt.hash(password, salt);
+    const newUser = new User({
+      ...user,
+      password:passwordEncrypted
+    });
+    await newUser.save();
+    res.status(201).json({message:'Usuario registrado'});
   } catch (error) {
     res.status(error.code || 500).json({error:error.message});
   }
@@ -62,15 +80,37 @@ const updateUser = (req,res)=>{
   res.status(200).json({message:'Se ha actualizado un usuario'});
 }
 
-const deleteUser = (req,res)=>{
-  res.status(200).json({message:'Se ha borrado un usuario'});
+const deleteUser = async (req,res)=>{
+  try {
+    const {id} = req.body;
+    const user = await User.findById(id);
+    if(!user) throw new CustomError('No existe el usuario solicitado', 404);
+    await User.findByIdAndDelete(id);
+    // const drinksToModify = await Drink.find({owner:id}); //* Busco todos las drinks que tienen al user como owner y los modifico
+    res.status(200).json({message:"El usuario ha sido eliminado"});
+  } catch (error) {
+    res.status(error.code || 500).json({message:error.message});
+  }
+}
+
+const login = async(req,res)=>{
+  try {
+    const {email,password} = req.body;
+    const user = await User.findOne({email});
+    const isOk = await bcrypt.compare(password,user.password);
+    if(!isOk) throw new CustomError('Credenciales inválidas', 401);
+    res.status(200).json({message:'logueo correcto'});
+  } catch (error) {
+    res.status(error.code || 500).json({message:error.message});
+  }
 }
 
 module.exports = {
   getUsers,
   getUsersByCountry,
-  addUser,
   updateUser,
   deleteUser,
-  getYoungUsers
+  getYoungUsers,
+  register,
+  login
 }
