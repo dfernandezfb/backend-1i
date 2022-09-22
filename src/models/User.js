@@ -18,6 +18,10 @@ const UserSchema = new Schema({
     type:String
     // match:[/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,'La contraseña no tiene el formato adecuado']
   },
+  role:{
+    type:Schema.Types.ObjectId,
+    ref:'Role'
+  },
   age:{
     type:Number,
     min:0,

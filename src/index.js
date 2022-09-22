@@ -6,8 +6,10 @@ const users = require('./routes/users');
 const products = require('./routes/products');
 const drinks = require('./routes/drinks');
 const connectDB = require('./db/db');
+const createRoles = require('./config/initialSetup');
 dotenv.config();
 connectDB();
+createRoles();
 const app= express();
 const PORT = /*process.env.PORT ||*/ 4000;
 // app.use(express.static(__dirname + '../public'))

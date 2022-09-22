@@ -1,7 +1,10 @@
 const CustomError = require('../helpers/CustomError');
 const Drink = require('../models/Drink');
 const User = require('./../models/User');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator');
+const { findById } = require('../models/Drink');
+const Role = require('../models/Role');
 
 // const getUsers = (req,res)=>{
 //   console.log(req.body); //! LAS PETICIONES DE TIPO GET NO TIENEN BODY
@@ -19,6 +22,16 @@ const getUsers = async(req,res)=>{
 }
 const getUsersByCountry = (req,res)=>{
   res.status(200).json({users:'Usuarios de ' + req.params.country});
+}
+
+const getUser = async(req,res)=>{
+  try {
+    const {id} =req.query;
+    const user = findById(id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(error.code || 500).json(error.message)
+  }
 }
 
 const getYoungUsers = async(req,res)=>{
@@ -63,11 +76,13 @@ const getYoungUsers = async(req,res)=>{
 const register = async ( req, res)=>{
   try {
     const { password, ...user } = req.body;
+    const role = await Role.findOne({name:'USER'});
     const salt = await bcrypt.genSalt(10);
     const passwordEncrypted= await bcrypt.hash(password, salt);
     const newUser = new User({
       ...user,
-      password:passwordEncrypted
+      password:passwordEncrypted,
+      role:role._id
     });
     await newUser.save();
     res.status(201).json({message:'Usuario registrado'});
@@ -82,12 +97,15 @@ const updateUser = (req,res)=>{
 
 const deleteUser = async (req,res)=>{
   try {
-    const {id} = req.body;
-    const user = await User.findById(id);
-    if(!user) throw new CustomError('No existe el usuario solicitado', 404);
-    await User.findByIdAndDelete(id);
-    // const drinksToModify = await Drink.find({owner:id}); //* Busco todos las drinks que tienen al user como owner y los modifico
-    res.status(200).json({message:"El usuario ha sido eliminado"});
+    const {idUser, idUserToBeDead} = req.body;
+    const user = await User.findById(idUser);
+    const role = await Role.findById(user.role);
+    if(!role) throw new CustomError('No existe rol especificado',404);
+    if(role.name ==='ADMIN'){
+      await User.findByIdAndDelete(id);
+      // const drinksToModify = await Drink.find({owner:id}); //* Busco todos las drinks que tienen al user como owner y los modifico
+      res.status(200).json({message:"El usuario ha sido eliminado"});
+    }
   } catch (error) {
     res.status(error.code || 500).json({message:error.message});
   }
@@ -97,13 +115,16 @@ const login = async(req,res)=>{
   try {
     const {email,password} = req.body;
     const user = await User.findOne({email});
-    const isOk = await bcrypt.compare(password,user.password);
+    if(!user) throw new CustomError('Usuario no encontrado',404)
+    const isOk = await bcrypt.compare(password,user.password); // boolean
     if(!isOk) throw new CustomError('Credenciales inválidas', 401);
     res.status(200).json({message:'logueo correcto'});
   } catch (error) {
     res.status(error.code || 500).json({message:error.message});
   }
 }
+
+//! DRY
 
 module.exports = {
   getUsers,
@@ -112,5 +133,8 @@ module.exports = {
   deleteUser,
   getYoungUsers,
   register,
-  login
+  login,
+  getUser
 }
+
+
