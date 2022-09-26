@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const { findById } = require('../models/Drink');
 const Role = require('../models/Role');
+const jwt = require('jsonwebtoken')
 
 // const getUsers = (req,res)=>{
 //   console.log(req.body); //! LAS PETICIONES DE TIPO GET NO TIENEN BODY
@@ -113,12 +114,18 @@ const deleteUser = async (req,res)=>{
 
 const login = async(req,res)=>{
   try {
+    // CONTROL DE USUARIO Y CONTRASEÑA
     const {email,password} = req.body;
     const user = await User.findOne({email});
     if(!user) throw new CustomError('Usuario no encontrado',404)
     const isOk = await bcrypt.compare(password,user.password); // boolean
     if(!isOk) throw new CustomError('Credenciales inválidas', 401);
-    res.status(200).json({message:'logueo correcto'});
+    
+    //!GENERAR EL TOKEN
+
+    const token = jwt.sign({id:user._id},process.env.JWT_SECRET_KEY,{expiresIn:'1h'});
+
+    res.status(200).json({message:'logueo correcto',token});
   } catch (error) {
     res.status(error.code || 500).json({message:error.message});
   }

@@ -5,8 +5,9 @@ const router = Router();
 const {check} = require('express-validator');
 const validateFields = require('../middlewares/validateFields');
 const { checkIfUserExist, checkIfRoleExist } = require('../helpers/customValidations');
+const auth = require('../middlewares/auth');
 
-router.get('/', /*verifyAdmin ,*/ getUsers)
+router.get('/', auth, verifyAdmin, getUsers)
 router.get('/:country', /*verifyAdmin ,*/ getUsersByCountry)
 router.get('/filter/young',(req,res,next)=>{console.log('ruta correcta');next()} ,/*verifyAdmin ,*/ getYoungUsers)
 router.post('/', [
